@@ -1,4 +1,3 @@
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { ModuleFederationPlugin } = require("webpack").container;
@@ -18,6 +17,9 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".vue"],
+    alias: {
+      vue: "vue/dist/vue.esm.js",
+    },
   },
   module: {
     rules: [
@@ -30,10 +32,13 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "shell_vue2",
       remotes: {
-        user_app: "user_app@http://localhost:8081/remoteEntry.js",
-        edit_user_app: "edit_user_app@http://localhost:8082/remoteEntry.js",
+        user_app_vue3: "user_app_vue3@http://localhost:8081/remoteEntry.js",
+        edit_user_app_vue3:
+          "edit_user_app_vue3@http://localhost:8082/remoteEntry.js",
       },
-      shared: {},
+      shared: {
+        vue: { singleton: true, eager: true },
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
