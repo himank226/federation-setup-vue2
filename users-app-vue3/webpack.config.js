@@ -1,4 +1,4 @@
-const path = require("path");
+// webpack.config.js
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { ModuleFederationPlugin } = require("webpack").container;
@@ -7,8 +7,9 @@ module.exports = {
   entry: "./src/main.js",
   mode: "development",
   devServer: {
-    port: 8080,
-    hot: true,
+    port: 8081,
+    hot: false,
+    liveReload: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
@@ -28,16 +29,13 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "shell_vue2",
-      remotes: {
-        user_app: "user_app@http://localhost:8081/remoteEntry.js",
-        edit_user_app: "edit_user_app@http://localhost:8082/remoteEntry.js",
+      name: "user_app",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./List": "./src/web-component.js",
       },
-      shared: {},
     }),
-    new HtmlWebpackPlugin({
-      template: "./public/index.html",
-    }),
+    new HtmlWebpackPlugin({ template: "./public/index.html" }),
     new VueLoaderPlugin(),
   ],
 };
