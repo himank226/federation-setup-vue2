@@ -2,21 +2,27 @@
   <div>
     <h1>Shell App (Vue 2)</h1>
 
-    <!-- User List Component -->
-    <div v-if="UserListComponent" id="user-app-vue3-container"></div>
-    <div v-else>Loading User List...</div>
+    <nav>
+      <!-- Local Routes -->
+      <button @click="navigateToLocalUserList">Local User List</button> |
+      <button @click="navigateToLocalEditUser">Local Edit User</button> |
+      <button @click="navigateToRemoteUserList">Remote User List</button> |
+      <button @click="navigateToRemoteEditUser">Remote Edit User</button>
 
-    <!-- Edit Component -->
-    <div
-      v-if="EditComponent"
-      id="edit-user-app-vue3-container"
-      style="margin-top: 20px"
-    ></div>
-    <div v-else>Loading Edit Component...</div>
+      <br />
+
+      <!-- Language Switcher -->
+      <button @click="changeLanguage('en')">English</button>
+      <button @click="changeLanguage('hi')">हिन्दी</button>
+    </nav>
+
+    <router-view />
   </div>
 </template>
 
 <script>
+import store from "./store/store";
+
 export default {
   name: "App",
   data() {
@@ -26,45 +32,43 @@ export default {
     };
   },
   created() {
-    this.loadUserListComponent();
-    this.loadEditComponent();
+    // Provide the store globally for remote components
+    this.$root.$options.provide = {
+      store, // Make store available in child components
+    };
   },
   methods: {
-    loadUserListComponent() {
-      import("user_app_vue3/List")
-        .then((module) => {
-          const component = module.default || module.List;
-          if (component) {
-            this.UserListComponent = component;
-            this.mountVue3Component(component, "#user-app-vue3-container");
-          }
-        })
-        .catch((err) => console.error("Error loading UserList:", err));
+    // Navigate to local user list
+    navigateToLocalUserList() {
+      if (this.$router.currentRoute.path !== "/users") {
+        this.$router.push("/users");
+      }
     },
 
-    loadEditComponent() {
-      import("edit_user_app_vue3/Edit")
-        .then((module) => {
-          const component = module.default || module.Edit;
-          if (component) {
-            this.EditComponent = component;
-            this.mountVue3Component(component, "#edit-user-app-vue3-container");
-          }
-        })
-        .catch((err) => console.error("Error loading Edit component:", err));
+    // Navigate to local edit user page
+    navigateToLocalEditUser() {
+      if (this.$router.currentRoute.path !== "/edit-user") {
+        this.$router.push("/edit-user");
+      }
     },
 
-    mountVue3Component(component, selector) {
-      import("user_app_vue3/vue")
-        .then((vue) => {
-          if (vue?.createApp) {
-            const app = vue.createApp(component);
-            app.mount(selector);
-          } else {
-            console.error("Vue 3 not loaded correctly.");
-          }
-        })
-        .catch((err) => console.error("Error loading Vue 3:", err));
+    // Navigate to remote user list page
+    navigateToRemoteUserList() {
+      if (this.$router.currentRoute.path !== "/users-remote") {
+        this.$router.push("/users-remote");
+      }
+    },
+
+    // Navigate to remote edit user page
+    navigateToRemoteEditUser() {
+      if (this.$router.currentRoute.path !== "/edit-user-remote") {
+        this.$router.push("/edit-user-remote");
+      }
+    },
+
+    // Change language
+    changeLanguage(lang) {
+      this.$i18n.locale = lang;
     },
   },
 };
