@@ -9,10 +9,15 @@ module.exports = {
   mode: "development",
   devServer: {
     port: 8081,
-    hot: true,
+    hot: false,
+    liveReload: true,
+    client: {
+      overlay: true,
+    },
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
+    historyApiFallback: true,
   },
   stats: {
     all: false,

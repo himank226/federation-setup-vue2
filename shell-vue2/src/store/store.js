@@ -3,19 +3,17 @@ import Vue from "vue";
 
 const LOCAL_STORAGE_KEY = "shell-users";
 
-// Load users from localStorage or fallback to defaults
 const storedUsers = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+
 const defaultUsers = [
   {
     id: 1,
-    name_en: "John Doe",
-    name_hi: "जॉन डो",
+    name: "John Doe",
     email: "john@example.com",
   },
   {
     id: 2,
-    name_en: "Jane Doe",
-    name_hi: "जेन डो",
+    name: "Jane Doe",
     email: "jane@example.com",
   },
 ];
@@ -30,6 +28,7 @@ function saveUsers(users) {
 
 const store = {
   state,
+
   setUsers(newUsers) {
     state.users = newUsers;
     saveUsers(newUsers);
@@ -43,7 +42,6 @@ const store = {
   updateUser(updatedUser) {
     const index = state.users.findIndex((user) => user.id === updatedUser.id);
     if (index !== -1) {
-      // Vue.set ensures reactivity
       Vue.set(state.users, index, updatedUser);
       saveUsers(state.users);
     }
