@@ -7,6 +7,7 @@ import store from "./store/store";
 Vue.config.productionTip = false;
 
 Vue.prototype.$store = store;
+console.log("Webpack publicPath:", __webpack_require__.p);
 
 new Vue({
   router,
