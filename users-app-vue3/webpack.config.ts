@@ -9,9 +9,11 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/",
+    publicPath: isProd
+      ? "https://users-app-vue3.vercel.app/"
+      : "http://localhost:8081/",
     filename: "[name].[contenthash].js",
-    assetModuleFilename: "[name].[contenthash][ext]",
+    chunkFilename: "[name].[contenthash].js",
     clean: true,
   },
   entry: "./src/main.ts",
@@ -57,7 +59,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "user_app_vue3",
       filename: "remoteEntry.js",
-      library: { type: "var", name: "user_app_vue3" },
+      //   library: { type: "var", name: "user_app_vue3" },
       exposes: {
         "./vue": "vue",
         "./List": "./src/components/List.vue",

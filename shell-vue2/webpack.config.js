@@ -9,7 +9,7 @@ const { remoteApps } = require("./remoteConfig");
 module.exports = (env, argv) => {
   const isProd = argv.mode === "production";
 
-  // Dynamically build remotes URLs based on env (dev/prod)
+  // Build remotes object dynamically based on env
   const remotes = remoteApps.reduce((acc, app) => {
     const url = isProd ? app.prodUrl : app.devUrl;
     acc[app.app_name] = `${app.app_name}@${url}`;
@@ -34,6 +34,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, "dist"),
       publicPath: "/",
       filename: "[name].[contenthash].js",
+      chunkFilename: "[name].[contenthash].js",
       assetModuleFilename: "[name].[contenthash][ext]",
       clean: true,
     },
