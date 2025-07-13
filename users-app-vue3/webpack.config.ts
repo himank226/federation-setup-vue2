@@ -9,9 +9,7 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
-    publicPath: isProd
-      ? "https://users-app-vue3.vercel.app/" // <--- absolute URL in prod
-      : "auto",
+    publicPath: "/",
     filename: "[name].[contenthash].js",
     assetModuleFilename: "[name].[contenthash][ext]",
     clean: true,
