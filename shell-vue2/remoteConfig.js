@@ -6,7 +6,7 @@ export const remoteApps = [
     app_name: "user_app_vue3",
     devUrl: "http://localhost:8081/remoteEntry.js",
     prodUrl:
-      "https://github.com/himank226/federation-setup-vue2/users-app-vue3/remoteEntry.js",
+      "https://himank226.github.io/federation-setup-vue2/users-app-vue3/remoteEntry.js",
     loader: () => import("user_app_vue3/List"),
   },
   {
@@ -16,7 +16,7 @@ export const remoteApps = [
     app_name: "edit_user_app_vue3",
     devUrl: "http://localhost:8082/remoteEntry.js",
     prodUrl:
-      "https://github.com/himank226/federation-setup-vue2/edit-user-app-vue3/remoteEntry.js",
+      "https://himank226.github.io/federation-setup-vue2/edit-user-app-vue3/remoteEntry.js",
     loader: () => import("edit_user_app_vue3/Edit"),
   },
 ];

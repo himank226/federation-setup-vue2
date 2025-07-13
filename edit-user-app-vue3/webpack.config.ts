@@ -8,9 +8,9 @@ const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
   output: {
-    publicPath: isProd ? "/federation-setup-vue2/users-app-vue3/" : "auto",
-    path: path.resolve(__dirname, "../dist/users-app-vue3"),
-    filename: "[name].js",
+    path: path.resolve(__dirname, "../docs/edit-user-app-vue3"),
+    publicPath: isProd ? "/federation-setup-vue2/edit-user-app-vue3/" : "auto",
+    filename: "[name].[contenthash].js",
     clean: true,
   },
   entry: "./src/main.ts",
