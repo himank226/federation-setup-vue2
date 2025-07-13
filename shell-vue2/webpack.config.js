@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
 
     output: {
       path: path.resolve(__dirname, "dist"),
-      publicPath: "/",
+      publicPath: "auto",
       filename: "[name].[contenthash].js",
       assetModuleFilename: "[name].[contenthash][ext]",
       clean: true,
