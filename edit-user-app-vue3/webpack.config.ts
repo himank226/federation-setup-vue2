@@ -9,9 +9,7 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
-    publicPath: isProd
-      ? "https://edit-user-app-vue3-liard.vercel.app/"
-      : "http://localhost:8082/",
+    publicPath: "auto",
     filename: "[name].[contenthash].js",
     chunkFilename: "[name].[contenthash].js",
     clean: true,

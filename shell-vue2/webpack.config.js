@@ -31,7 +31,7 @@ module.exports = (env, argv) => {
 
     output: {
       path: path.resolve(__dirname, "dist"),
-      publicPath: "https://shell-vue2.vercel.app/",
+      publicPath: "/",
       filename: "[name].[contenthash].js",
       chunkFilename: "[name].[contenthash].js",
     },

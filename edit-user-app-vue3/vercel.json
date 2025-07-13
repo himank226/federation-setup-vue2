@@ -1,12 +1,4 @@
 {
-  "headers": [
-    {
-      "source": "/remoteEntry.js",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
-    },
-    {
-      "source": "/:all*(js|css)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
-    }
-  ]
+  "builds": [{ "src": "dist/**", "use": "@vercel/static" }],
+  "routes": [{ "src": "/(.*)", "dest": "/dist/$1" }]
 }
