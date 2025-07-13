@@ -4,9 +4,17 @@ const { ModuleFederationPlugin } = require("webpack").container;
 const path = require("path");
 const webpack = require("webpack");
 
+const isProd = process.env.NODE_ENV === "production";
+
 module.exports = {
+  output: {
+    publicPath: isProd ? "/federation-setup-vue2/users-app-vue3/" : "auto",
+    path: path.resolve(__dirname, "../dist/users-app-vue3"),
+    filename: "[name].js",
+    clean: true,
+  },
   entry: "./src/main.ts",
-  mode: "development",
+  mode: isProd ? "production" : "development",
   devServer: {
     port: 8082,
     hot: false,
@@ -21,9 +29,6 @@ module.exports = {
   },
   stats: {
     all: false,
-  },
-  output: {
-    publicPath: "auto",
   },
   resolve: {
     extensions: [".ts", ".js", ".vue"],
