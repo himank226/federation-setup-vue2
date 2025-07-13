@@ -9,8 +9,9 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
-    publicPath: isProd ? "/" : "auto",
+    publicPath: "/",
     filename: "[name].[contenthash].js",
+    assetModuleFilename: "[name].[contenthash][ext]",
     clean: true,
   },
   entry: "./src/main.ts",
