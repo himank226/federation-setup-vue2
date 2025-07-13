@@ -3,24 +3,24 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const { VueLoaderPlugin } = require("vue-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
 const { remoteApps } = require("./remoteConfig");
-
-// Dynamically build remotes from remoteApps config
-const remotes = remoteApps.reduce((acc, app) => {
-  acc[app.app_name] = `${app.app_name}@${app.url}`;
-  return acc;
-}, {});
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === "production";
+
+  // Dynamically build remotes URLs based on env (dev/prod)
+  const remotes = remoteApps.reduce((acc, app) => {
+    const url = isProd ? app.prodUrl : app.devUrl;
+    acc[app.app_name] = `${app.app_name}@${url}`;
+    return acc;
+  }, {});
 
   return {
     entry: "./src/main.js",
 
     mode: isProd ? "production" : "development",
-
     devtool: isProd ? false : "inline-source-map",
-
     devServer: isProd
       ? undefined
       : {
@@ -63,7 +63,7 @@ module.exports = (env, argv) => {
       new ModuleFederationPlugin({
         name: "shell_vue2",
         filename: "remoteEntry.js",
-        remotes: remotes, // Remote apps to consume, loaded dynamically from remoteConfig
+        remotes: remotes, // dynamically set remotes from remoteApps
         exposes: {
           "./i18n": "./src/translation/i18n",
         },

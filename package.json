@@ -1,0 +1,28 @@
+{
+  "name": "federation-setup-vue2",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf node_modules package-lock.json users-app-vue3/node_modules users-app-vue3/package-lock.json edit-user-app-vue3/node_modules edit-user-app-vue3/package-lock.json shell-vue2/node_modules shell-vue2/package-lock.json dist",
+    "install:remote1": "cd users-app-vue3 && npm install",
+    "install:remote2": "cd edit-user-app-vue3 && npm install",
+    "install:shell": "cd shell-vue2 && npm install",
+    "install:all": "npm run install:remote1 && npm run install:remote2 && npm run install:shell",
+    "dev:remote1": "cd users-app-vue3 && npm run serve",
+    "dev:remote2": "cd edit-user-app-vue3 && npm run serve",
+    "dev:shell": "cd shell-vue2 && npm run serve",
+    "dev": "concurrently \"npm run dev:remote1\" \"npm run dev:remote2\" \"npm run dev:shell\"",
+    "build:remote1": "cd users-app-vue3 && npm run build",
+    "build:remote2": "cd edit-user-app-vue3 && npm run build",
+    "build:shell": "cd shell-vue2 && npm run build",
+    "build": "npm run build:remote1 && npm run build:remote2 && npm run build:shell",
+    "copy:dist": "mkdir -p dist && copyfiles -u 1 \"users-app-vue3/dist/**/*\" dist/users-app-vue3 && copyfiles -u 1 \"edit-user-app-vue3/dist/**/*\" dist/edit-user-app-vue3 && copyfiles -u 1 \"shell-vue2/dist/**/*\" dist/shell-vue2",
+    "deploy": "gh-pages -d dist",
+    "deploy:all": "npm run clean && npm install && npm run install:all && npm run build && npm run copy:dist && npm run deploy"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "copyfiles": "^2.4.1",
+    "gh-pages": "^4.0.0"
+  }
+}
