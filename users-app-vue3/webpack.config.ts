@@ -8,9 +8,8 @@ const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
   output: {
-    // Output inside mono repo's /docs/users-app-vue3 folder
-    path: path.resolve(__dirname, "../docs/users-app-vue3"),
-    publicPath: isProd ? "/federation-setup-vue2/users-app-vue3/" : "auto",
+    path: path.resolve(__dirname, "dist"),
+    publicPath: isProd ? "https://users-app-vue3.vercel.app/" : "auto",
     filename: "[name].[contenthash].js",
     clean: true,
   },

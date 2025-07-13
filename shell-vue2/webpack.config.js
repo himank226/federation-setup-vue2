@@ -15,8 +15,6 @@ module.exports = (env, argv) => {
     acc[app.app_name] = `${app.app_name}@${url}`;
     return acc;
   }, {});
-  const localProdTesting = process.env.LOCAL_PROD === "true";
-  console.log(`Building in ${isProd ? "production" : "development"} mode`);
 
   return {
     entry: "./src/main.js",
@@ -33,8 +31,8 @@ module.exports = (env, argv) => {
         },
 
     output: {
-      path: path.resolve(__dirname, "../docs/shell-vue2"),
-      publicPath: isProd ? "/federation-setup-vue2/shell-vue2/" : "auto",
+      path: path.resolve(__dirname, "dist"),
+      publicPath: isProd ? "https://shell-vue2.vercel.app/" : "auto",
       filename: "[name].[contenthash].js",
       clean: true,
     },
