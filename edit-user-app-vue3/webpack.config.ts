@@ -9,10 +9,15 @@ module.exports = {
   mode: "development",
   devServer: {
     port: 8082,
-    hot: true,
+    hot: false,
+    liveReload: true,
+    client: {
+      overlay: true,
+    },
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
+    historyApiFallback: true,
   },
   stats: {
     all: false,
@@ -23,7 +28,7 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js", ".vue"],
     alias: {
-      "@": path.resolve(__dirname, "src"), // <-- Add this alias for resolving `@` to `src`
+      "@": path.resolve(__dirname, "src"),
     },
   },
 
@@ -46,7 +51,6 @@ module.exports = {
       name: "edit_user_app_vue3",
       filename: "remoteEntry.js",
       exposes: {
-        "./vue": "vue",
         "./Edit": "./src/components/Edit.vue",
       },
     }),

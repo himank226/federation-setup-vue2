@@ -1,62 +1,92 @@
 <template>
   <div>
-    <h1>user</h1>
+    <h1>{{ title }}</h1>
     <ul>
       <li v-for="user in users" :key="user.id">
-        {{ user.name_en }} - {{ user.email }}
-        <button @click="goToEdit(user.id)">edit</button>
+        {{ user.name }} - {{ user.email }}
+        <button @click="goToEdit(user.id)">{{ editText }}</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from "vue";
+import {
+  defineComponent,
+  inject,
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+} from "vue";
 
 interface User {
   id: number;
-  name_en: string;
-  name_hi: string;
+  name: string;
   email: string;
+}
+
+interface Store {
+  state: {
+    users: User[];
+  };
+}
+
+interface Router {
+  push(location: { name: string; query: { id: number } }): void;
+}
+
+interface I18n {
+  t(key: string): string;
+  locale: string;
 }
 
 export default defineComponent({
   name: "UserListRemote",
   setup() {
-    const router = inject("router");
-    const store = inject("store");
+    const store = inject<Store>("store");
+    const router = inject<Router>("router");
+    const i18n = inject<I18n>("i18n");
 
-    const users = ref<User[]>(store?.state.users ?? []);
+    if (!store || !router || !i18n) {
+      throw new Error("Dependencies not provided");
+    }
 
-    const goToEdit = (userId: number) => {
-      if (router) {
-        router.push({ name: "edit-user-remote", params: { userId } });
-      } else {
-        console.error("Router not found in remote app");
+    const users = computed(() => store.state.users);
+    const title = ref("");
+    const editText = ref("");
+
+    const updateTexts = () => {
+      title.value = i18n.t("users");
+      editText.value = i18n.t("edit");
+    };
+
+    const onLocaleChanged = (event: Event) => {
+      if ("detail" in event) {
+        i18n.locale = (event as CustomEvent).detail;
+        updateTexts();
       }
     };
 
+    onMounted(() => {
+      updateTexts();
+      window.addEventListener("locale-changed", onLocaleChanged);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("locale-changed", onLocaleChanged);
+    });
+
+    const goToEdit = (id: number) => {
+      router.push({ name: "edit-user-remote", query: { id } });
+    };
+
     return {
-      goToEdit,
+      title,
+      editText,
       users,
+      goToEdit,
     };
   },
 });
 </script>
-
-<style scoped>
-button {
-  padding: 8px 12px;
-  margin-top: 10px;
-}
-
-button[type="submit"] {
-  background-color: #4caf50;
-  color: white;
-}
-
-button[type="button"] {
-  background-color: #f44336;
-  color: white;
-}
-</style>

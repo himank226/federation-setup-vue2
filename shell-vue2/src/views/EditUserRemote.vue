@@ -11,7 +11,7 @@
 import RemoteMount from "../components/RemoteMount.vue";
 
 export default {
-  name: "UserListRemote",
+  name: "EditUserRemoteWrapper",
   components: { RemoteMount },
 };
 </script>

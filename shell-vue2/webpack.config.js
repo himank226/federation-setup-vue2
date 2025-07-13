@@ -45,7 +45,7 @@ module.exports = {
           "edit_user_app_vue3@http://localhost:8082/remoteEntry.js",
       },
       exposes: {
-        "./i18n": "./src/translation/i18n", // Exposing the i18n instance to remotes
+        "./i18n": "./src/translation/i18n", // exposing i18n to remotes
       },
       shared: {
         vue: { singleton: true, eager: true },
