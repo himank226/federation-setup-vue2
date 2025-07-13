@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
 
     output: {
       path: path.resolve(__dirname, "dist"),
-      publicPath: isProd ? "https://shell-vue2.vercel.app/" : "auto",
+      publicPath: isProd ? "/" : "auto",
       filename: "[name].[contenthash].js",
       clean: true,
     },
