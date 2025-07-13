@@ -1,67 +1,100 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { VueLoaderPlugin } = require("vue-loader");
 const { ModuleFederationPlugin } = require("webpack").container;
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const { VueLoaderPlugin } = require("vue-loader");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { remoteApps } = require("./remoteConfig");
 
-module.exports = {
-  entry: "./src/main.js",
-  mode: "development",
-  devServer: {
-    port: 8080,
-    hot: true,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-    historyApiFallback: true,
-  },
-  stats: {
-    all: false,
-  },
-  output: {
-    publicPath: "auto",
-    clean: true,
-  },
+// Dynamically build remotes from remoteApps config
+const remotes = remoteApps.reduce((acc, app) => {
+  acc[app.app_name] = `${app.app_name}@${app.url}`;
+  return acc;
+}, {});
 
-  resolve: {
-    extensions: [".js", ".vue"],
-    alias: {
-      vue: "vue/dist/vue.esm.js",
+module.exports = (env, argv) => {
+  const isProd = argv.mode === "production";
+
+  return {
+    entry: "./src/main.js",
+
+    mode: isProd ? "production" : "development",
+
+    devtool: isProd ? false : "inline-source-map",
+
+    devServer: isProd
+      ? undefined
+      : {
+          port: 8080,
+          hot: true,
+          headers: { "Access-Control-Allow-Origin": "*" },
+          historyApiFallback: true,
+        },
+
+    output: {
+      filename: isProd ? "[name].[contenthash].js" : "[name].js",
+      chunkFilename: isProd ? "[name].[contenthash].js" : "[name].js",
+      clean: true,
+      publicPath: "auto",
     },
-  },
-  module: {
-    rules: [
-      { test: /\.vue$/, loader: "vue-loader" },
-      { test: /\.js$/, loader: "babel-loader" },
-      { test: /\.css$/, use: ["style-loader", "css-loader"] },
+
+    resolve: {
+      extensions: [".js", ".vue"],
+      alias: {
+        vue: "vue/dist/vue.esm.js",
+      },
+    },
+
+    module: {
+      rules: [
+        { test: /\.vue$/, loader: "vue-loader" },
+        { test: /\.js$/, loader: "babel-loader" },
+        {
+          test: /\.css$/,
+          use: isProd
+            ? [MiniCssExtractPlugin.loader, "css-loader"]
+            : ["style-loader", "css-loader"],
+        },
+      ],
+    },
+
+    plugins: [
+      new VueLoaderPlugin(),
+
+      new ModuleFederationPlugin({
+        name: "shell_vue2",
+        filename: "remoteEntry.js",
+        remotes: remotes, // Remote apps to consume, loaded dynamically from remoteConfig
+        exposes: {
+          "./i18n": "./src/translation/i18n",
+        },
+        shared: {
+          vue: { singleton: true, eager: true },
+          "vue-i18n": { singleton: true, eager: true },
+        },
+      }),
+
+      new HtmlWebpackPlugin({
+        template: "./public/index.html",
+      }),
+
+      new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: JSON.stringify(true),
+        __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
+      }),
+
+      ...(isProd
+        ? [new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" })]
+        : []),
     ],
-  },
-  plugins: [
-    new ModuleFederationPlugin({
-      name: "shell_vue2",
-      filename: "remoteEntry.js",
-      remotes: {
-        user_app_vue3: "user_app_vue3@http://localhost:8081/remoteEntry.js",
-        edit_user_app_vue3:
-          "edit_user_app_vue3@http://localhost:8082/remoteEntry.js",
-      },
-      exposes: {
-        "./i18n": "./src/translation/i18n", // exposing i18n to remotes
-      },
-      shared: {
-        vue: { singleton: true, eager: true },
-        "vue-i18n": { singleton: true, eager: true },
-      },
-    }),
 
-    new HtmlWebpackPlugin({
-      template: "./public/index.html",
-    }),
-
-    new VueLoaderPlugin(),
-    new webpack.DefinePlugin({
-      __VUE_OPTIONS_API__: JSON.stringify(true),
-      __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
-      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
-    }),
-  ],
+    optimization: isProd
+      ? {
+          splitChunks: {
+            chunks: "all",
+          },
+          runtimeChunk: "single",
+        }
+      : {},
+  };
 };

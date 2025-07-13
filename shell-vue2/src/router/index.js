@@ -1,19 +1,26 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import UserListRemote from "../views/UserListRemote.vue";
-import EditUserRemote from "../views/EditUserRemote.vue";
+import RemoteView from "../views/RemoteView.vue";
+import { remoteApps } from "../../remoteConfig";
 
 Vue.use(VueRouter);
 
+// Dynamically generate routes based on remote config
+const dynamicRoutes = remoteApps.map((app) => {
+  return {
+    path: app.path,
+    name: app.route_name,
+    component: RemoteView,
+    meta: {
+      scope: app.scope,
+    },
+  };
+});
+
 const routes = [
+  ...dynamicRoutes,
   { path: "*", redirect: "/" },
-  { path: "/", redirect: "/users-remote" },
-  { path: "/users-remote", component: UserListRemote, name: "users-remote" },
-  {
-    path: "/edit-user-remote",
-    name: "edit-user-remote",
-    component: EditUserRemote,
-  },
+  { path: "/", redirect: "/users" },
 ];
 
 export default new VueRouter({

@@ -1,0 +1,74 @@
+// constants/users.js
+export const defaultUsers = [
+  {
+    id: 1,
+    name: "Aarav Sharma",
+    email: "aarav.sharma@gmail.com",
+    label: "Support",
+    message: "I'm having trouble resetting my password.",
+  },
+  {
+    id: 2,
+    name: "Priya Patel",
+    email: "priya.patel@gmail.com",
+    label: "Feedback",
+    message: "I really like the new dashboard layout, it's much cleaner.",
+  },
+  {
+    id: 3,
+    name: "Ishaan Verma",
+    email: "ishaan.verma@gmail.com",
+    label: "Inquiry",
+    message: "Can you provide more details about the enterprise plan?",
+  },
+  {
+    id: 4,
+    name: "Rajeev Singh",
+    email: "rajeeve.singh@gmail.com",
+    label: "Complaint",
+    message: "My last order arrived damaged and incomplete.",
+  },
+  {
+    id: 5,
+    name: "Sanya Gupta",
+    email: "sanya.gupta@gmail.com",
+    label: "Support",
+    message: "I'm getting a 404 error when I try to access my account.",
+  },
+  {
+    id: 6,
+    name: "Rohit Sharma",
+    email: "rohit.sharma@gmail.com",
+    label: "Feedback",
+    message:
+      "The mobile app is great, but it crashes sometimes when I upload files.",
+  },
+  {
+    id: 7,
+    name: "Neha Kumar",
+    email: "neha.kumar@gmail.com",
+    label: "Inquiry",
+    message: "Is there a student discount available for subscriptions?",
+  },
+  {
+    id: 8,
+    name: "Ankit Mehta",
+    email: "ankit.mehta@gmail.com",
+    label: "Complaint",
+    message: "I was charged twice for the same service.",
+  },
+  {
+    id: 9,
+    name: "Simran Kaur",
+    email: "simran.kaur@gmail.com",
+    label: "Support",
+    message: "How can I update my billing information?",
+  },
+  {
+    id: 10,
+    name: "Manish Reddy",
+    email: "manish.reddy@gmail.com",
+    label: "Feedback",
+    message: "Love the product! Would love to see a dark mode in the future.",
+  },
+];
