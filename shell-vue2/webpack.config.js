@@ -18,7 +18,6 @@ module.exports = (env, argv) => {
 
   return {
     entry: "./src/main.js",
-
     mode: isProd ? "production" : "development",
     devtool: isProd ? false : "inline-source-map",
     devServer: isProd
@@ -32,11 +31,9 @@ module.exports = (env, argv) => {
 
     output: {
       path: path.resolve(__dirname, "dist"),
-      publicPath: "/",
+      publicPath: "https://shell-vue2.vercel.app/",
       filename: "[name].[contenthash].js",
       chunkFilename: "[name].[contenthash].js",
-      assetModuleFilename: "[name].[contenthash][ext]",
-      clean: true,
     },
 
     resolve: {
