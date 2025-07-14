@@ -3,78 +3,71 @@
     <Spinner v-if="isLoading" />
 
     <div v-if="error" class="error-message">
-      <p>Error loading component. Please try again later.</p>
+      <p>Error loading remote app. Please try again later.</p>
     </div>
 
-    <div :id="containerId" v-show="!isLoading && !error"></div>
+    <div :id="containerId" ref="container" v-show="!isLoading && !error"></div>
   </div>
 </template>
 
 <script>
-import { remoteApps } from "../../remoteConfig";
 import Spinner from "./Spinner.vue";
+import { remoteApps } from "../../remoteConfig";
 
 export default {
-  components: {
-    Spinner,
-  },
-  props: {
-    scope: String,
-    containerId: String,
-  },
+  name: "RemoteView",
+  components: { Spinner },
   data() {
     return {
       isLoading: false,
       error: false,
+      containerId: `remote-container-${Date.now()}`,
     };
   },
   async mounted() {
-    await this.loadComponent();
-  },
-  methods: {
-    /**
-     * Dynamically loads and mounts a remote Vue 3 component
-     * using the configuration defined in remoteApps.
-     */
-    async loadComponent() {
-      this.isLoading = true;
-      this.error = false;
+    this.isLoading = true;
+    this.error = false;
 
-      try {
-        const vue = await import("user_app_vue3/vue");
-        if (!vue?.createApp) {
-          this.error = true;
-          return;
-        }
+    try {
+      const scope = this.$route.meta.scope || "";
+      // const moduleName = this.$route.meta.module || "./mount";  // Not needed here
 
-        // Find the matching remote app config based on scope
-        const appConfig = remoteApps.find((app) => app.scope === this.scope);
+      console.debug(
+        `[DEBUG] Attempting to load remote app with scope: ${scope}`
+      );
 
-        if (!appConfig) {
-          throw new Error(`Unknown scope: ${this.scope}`);
-        }
-
-        const module = await appConfig.loader();
-        const component = module.default || module;
-        const app = vue.createApp(component);
-
-        // Provide global context from Vue 2 root
-        const { $store: store, $i18n: i18n, $router: router } = this.$root;
-        app.provide("store", store);
-        app.provide("i18n", i18n);
-        app.provide("router", router);
-
-        app.mount(`#${this.containerId}`);
-      } catch (err) {
-        console.error(
-          `Failed to load component for scope "${this.scope}":`,
-          err
-        );
-        this.error = true;
-      } finally {
-        this.isLoading = false;
+      const appConfig = remoteApps.find((app) => app.scope === scope);
+      if (!appConfig) {
+        throw new Error(`Unknown scope: ${scope}`);
       }
-    },
+
+      console.debug("[DEBUG] Found remote app config:", appConfig);
+
+      const remoteModule = await appConfig.loader(); // use loader from config
+
+      console.debug("[DEBUG] Loaded remote module:", remoteModule);
+
+      if (!remoteModule?.mount) {
+        const exposedKeys = Object.keys(remoteModule || {});
+        console.error("[DEBUG] Remote module keys:", exposedKeys);
+        throw new Error("Remote module does not expose a mount method");
+      }
+
+      remoteModule.mount(this.$refs.container, {
+        store: this.$store,
+        router: this.$router,
+        i18n: this.$i18n,
+      });
+
+      console.debug(
+        `[DEBUG] Mounted remote app in container: #${this.containerId}`
+      );
+    } catch (err) {
+      console.error(`[ERROR] Failed to load remote app:`, err);
+      this.error = true;
+    } finally {
+      this.isLoading = false;
+    }
   },
 };
 </script>

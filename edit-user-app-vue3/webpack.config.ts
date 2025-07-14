@@ -9,9 +9,9 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/",
+    publicPath: "auto",
     filename: "[name].[contenthash].js",
-    assetModuleFilename: "[name].[contenthash][ext]",
+    chunkFilename: "[name].[contenthash].js",
     clean: true,
   },
   entry: "./src/main.ts",
@@ -56,9 +56,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "edit_user_app_vue3",
       filename: "remoteEntry.js",
-      library: { type: "var", name: "edit_user_app_vue3" },
       exposes: {
         "./Edit": "./src/components/Edit.vue",
+        "./mount": "./src/mount.ts",
       },
     }),
     new HtmlWebpackPlugin({ template: "./public/index.html" }),

@@ -14,15 +14,9 @@
           v-if="field !== 'message'"
           :id="field"
           type="text"
-          :value="user[field]"
-          @input="onInput(field, $event)"
+          v-model="user[field]"
         />
-        <textarea
-          v-else
-          :id="field"
-          :value="user[field]"
-          @input="onInput(field, $event)"
-        ></textarea>
+        <textarea v-else :id="field" v-model="user[field]"></textarea>
       </div>
 
       <div class="form-group">
@@ -84,13 +78,6 @@ export default defineComponent({
         } as any)
     );
 
-    // Typed event handler for input events
-    function onInput<K extends keyof User>(field: K, e: Event) {
-      const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-      const inputValue = target.value;
-      user[field] = inputValue as User[K]; // assuming string fields only here
-    }
-
     const saveUser = () => {
       store.updateUser({ ...user });
       alert(translations.value.userUpdated);
@@ -107,7 +94,6 @@ export default defineComponent({
     return {
       user,
       translations,
-      onInput,
       saveUser,
       fieldLabels,
     };
@@ -115,7 +101,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .form-container {
   display: flex;
   justify-content: center;

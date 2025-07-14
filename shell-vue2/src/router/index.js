@@ -13,6 +13,7 @@ const dynamicRoutes = remoteApps.map((app) => {
     component: RemoteView,
     meta: {
       scope: app.scope,
+      module: "./mount",
     },
   };
 });
