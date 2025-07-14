@@ -6,58 +6,70 @@
       <p>Error loading remote app. Please try again later.</p>
     </div>
 
-    <div :id="containerId" v-show="!isLoading && !error"></div>
+    <div :id="containerId" ref="container" v-show="!isLoading && !error"></div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, getCurrentInstance } from "vue";
+<script>
 import Spinner from "./Spinner.vue";
-import { remoteApps } from "../../remoteConfig"; // remote config with { scope, loader }
+import { remoteApps } from "../../remoteConfig";
 
-const props = defineProps({
-  scope: String,
-  containerId: String,
-});
+export default {
+  name: "RemoteView",
+  components: { Spinner },
+  data() {
+    return {
+      isLoading: false,
+      error: false,
+      containerId: `remote-container-${Date.now()}`,
+    };
+  },
+  async mounted() {
+    this.isLoading = true;
+    this.error = false;
 
-const isLoading = ref(false);
-const error = ref(false);
+    try {
+      const scope = this.$route.meta.scope || "";
+      // const moduleName = this.$route.meta.module || "./mount";  // Not needed here
 
-const instance = getCurrentInstance();
+      console.debug(
+        `[DEBUG] Attempting to load remote app with scope: ${scope}`
+      );
 
-async function loadRemote() {
-  isLoading.value = true;
-  error.value = false;
+      const appConfig = remoteApps.find((app) => app.scope === scope);
+      if (!appConfig) {
+        throw new Error(`Unknown scope: ${scope}`);
+      }
 
-  try {
-    // Find remote config by scope
-    const appConfig = remoteApps.find((app) => app.scope === props.scope);
-    if (!appConfig) {
-      throw new Error(`Unknown scope: ${props.scope}`);
+      console.debug("[DEBUG] Found remote app config:", appConfig);
+
+      const remoteModule = await appConfig.loader(); // use loader from config
+
+      console.debug("[DEBUG] Loaded remote module:", remoteModule);
+
+      if (!remoteModule?.mount) {
+        const exposedKeys = Object.keys(remoteModule || {});
+        console.error("[DEBUG] Remote module keys:", exposedKeys);
+        throw new Error("Remote module does not expose a mount method");
+      }
+
+      remoteModule.mount(this.$refs.container, {
+        store: this.$store,
+        router: this.$router,
+        i18n: this.$i18n,
+      });
+
+      console.debug(
+        `[DEBUG] Mounted remote app in container: #${this.containerId}`
+      );
+    } catch (err) {
+      console.error(`[ERROR] Failed to load remote app:`, err);
+      this.error = true;
+    } finally {
+      this.isLoading = false;
     }
-
-    // Dynamically import the exposed mount method from remote
-    const remoteMountModule = await appConfig.loader(); // e.g. import("remoteApp/mount")
-    if (!remoteMountModule?.mount) {
-      throw new Error("Remote app does not expose a mount method");
-    }
-
-    const { proxy } = instance;
-    const { $store: store, $router: router, $i18n: i18n } = proxy.$root || {};
-
-    // Mount the remote app into the container
-    remoteMountModule.mount(`#${props.containerId}`, { store, router, i18n });
-  } catch (e) {
-    console.error(`Failed to load remote app (${props.scope}):`, e);
-    error.value = true;
-  } finally {
-    isLoading.value = false;
-  }
-}
-
-onMounted(() => {
-  loadRemote();
-});
+  },
+};
 </script>
 
 <style scoped>

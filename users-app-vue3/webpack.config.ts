@@ -57,7 +57,6 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "user_app_vue3",
       filename: "remoteEntry.js",
-      //   library: { type: "var", name: "user_app_vue3" },
       exposes: {
         "./List": "./src/components/List.vue",
         "./mount": "./src/mount.ts",
