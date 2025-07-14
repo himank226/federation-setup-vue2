@@ -59,6 +59,7 @@ module.exports = {
       //   library: { type: "var", name: "edit_user_app_vue3" },
       exposes: {
         "./Edit": "./src/components/Edit.vue",
+        "./mount": "./src/mount.ts",
       },
     }),
     new HtmlWebpackPlugin({ template: "./public/index.html" }),

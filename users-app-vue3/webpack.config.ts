@@ -59,8 +59,8 @@ module.exports = {
       filename: "remoteEntry.js",
       //   library: { type: "var", name: "user_app_vue3" },
       exposes: {
-        "./vue": "vue",
         "./List": "./src/components/List.vue",
+        "./mount": "./src/mount.ts",
       },
     }),
     new HtmlWebpackPlugin({ template: "./public/index.html" }),
