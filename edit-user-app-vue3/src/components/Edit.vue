@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, inject, reactive, computed, watchEffect } from "vue";
-import type { User, Store, Router, I18n } from "../types/edit.types";
+import type { User, Store, Router, I18n } from "../interfaces/edit.interface";
 
 export default defineComponent({
   name: "EditUserRemote",

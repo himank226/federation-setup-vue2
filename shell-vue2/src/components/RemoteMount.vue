@@ -30,26 +30,16 @@ export default {
 
     try {
       const scope = this.$route.meta.scope || "";
-      // const moduleName = this.$route.meta.module || "./mount";  // Not needed here
-
-      console.debug(
-        `[DEBUG] Attempting to load remote app with scope: ${scope}`
-      );
 
       const appConfig = remoteApps.find((app) => app.scope === scope);
+
       if (!appConfig) {
         throw new Error(`Unknown scope: ${scope}`);
       }
 
-      console.debug("[DEBUG] Found remote app config:", appConfig);
-
       const remoteModule = await appConfig.loader(); // use loader from config
 
-      console.debug("[DEBUG] Loaded remote module:", remoteModule);
-
       if (!remoteModule?.mount) {
-        const exposedKeys = Object.keys(remoteModule || {});
-        console.error("[DEBUG] Remote module keys:", exposedKeys);
         throw new Error("Remote module does not expose a mount method");
       }
 
@@ -58,12 +48,7 @@ export default {
         router: this.$router,
         i18n: this.$i18n,
       });
-
-      console.debug(
-        `[DEBUG] Mounted remote app in container: #${this.containerId}`
-      );
     } catch (err) {
-      console.error(`[ERROR] Failed to load remote app:`, err);
       this.error = true;
     } finally {
       this.isLoading = false;

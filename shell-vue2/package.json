@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Vue 2 Host App using Module Federation",
   "scripts": {
-    "serve": "webpack serve --mode development",
+    "dev": "webpack serve --mode development",
     "build": "webpack --mode production"
   },
   "dependencies": {
