@@ -1,4 +1,4 @@
-# 🏗️ Modular Frontend Platform — Vue 2 Host + Vue 3 Remote Apps (All Apps Use Webpack Module Federation)
+# 🏗️ Modular Frontend Platform — Host App(Vue 2) + Remote Apps(Vue 3) (All Apps Use Webpack Module Federation)
 
 ## 💡 Overview
 
@@ -92,26 +92,15 @@ All apps use **Webpack Module Federation** to enable:
 ### 🗺️ Router
 
 - Fully owned by shell app
-- Controls which remote app is loaded and when
-- Supports lazy loading for performance
+- Controls which remote app is loaded
 
 ---
 
 ### 🗃️ Global Store
 
 - Central reactive store using `Vue.observable`
-- Holds user list and selected user
+- Holds user list and udpdate user
 - Parent handles all mutations via `store.updateUsers()` after receiving events from remotes
-- Future-ready for migration to Vuex or Pinia
-
----
-
-### 🔄 Update Flow
-
-1️⃣ Remote apps display data reactively from store.
-2️⃣ Remote apps emit update events to parent.
-3️⃣ Parent calls `store.updateUsers()` to update state and simulate API (localStorage).
-4️⃣ Changes automatically update all connected views.
 
 ---
 
@@ -125,16 +114,8 @@ All apps use **Webpack Module Federation** to enable:
 
 ### Local Storage Persistence
 
-- Saves data to localStorage after each update.
+- Saves data to local storage after each update.
 - Reloads persisted data on refresh.
-
----
-
-### Benefits
-
-- ✅ Simulates real API workflows
-- ✅ Consistent state persistence
-- ✅ No backend dependency
 
 ---
 
@@ -162,41 +143,23 @@ Benefits
 ```
 
 ```
+🛠️ Project Setup Guide
+
 1️⃣ Clone the repository
 git clone https://github.com/himank226/federation-setup-vue2.git
 cd federation-setup-vue2
 
-2️⃣ Install and run Shell App
-cd ../users-app-vue3
-npm install
-npm run serve
-Runs at: http://localhost:8081
+2️⃣ Install all dependencies
+Run this command to install dependencies for all apps (Shell + Remotes):
+npm run install:all
 
-3️⃣ Install and run User List App
-cd ../edit-user-app-vue3
-npm install
-npm run serve
-Runs at: http://localhost:8082
+3️⃣ Start all apps (Shell + Remotes)
+Use the dev script to run all three apps concurrently:
+npm run dev
 
-4️⃣ Install and run Edit User App
-
-cd shell-vue2
-npm install
-npm run serve
-Runs at: http://localhost:8080
-
-5️⃣ Visit the shell app
+4️⃣ Visit the shell app
 Open http://localhost:8080 in your browser.
-
-Go to /users to view the user list
-
-Go to /edit-user?id=1 to edit user details
 ```
-
-📸 Screenshots
-![User List Page](./screenshots/screenshot-user-list.png)
-
-![Edit User Page](./screenshots/screenshot-edit.png)
 
 💻 Demonstration
 
@@ -205,3 +168,8 @@ Go to /edit-user?id=1 to edit user details
 🎥 Walkthrough Video: [link](https://www.loom.com/share/395249f7637e44a2bd2b79e94bbaf2c1?sid=1c417146-00c3-4904-b8dc-3b2e7d129736)
 
 💻 Source Code: [GitHub Repository](https://github.com/himank226/federation-setup-vue2)
+
+📸 Screenshots
+![User List Page](./screenshots/screenshot-user-list.png)
+
+![Edit User Page](./screenshots/screenshot-edit.png)

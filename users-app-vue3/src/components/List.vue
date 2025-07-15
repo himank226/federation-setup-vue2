@@ -32,7 +32,12 @@
 
 <script lang="ts">
 import { defineComponent, inject, computed } from "vue";
-import type { User, Store, Router, I18n } from "../types/list.types.js";
+import type {
+  User,
+  Store,
+  Router,
+  I18n,
+} from "../interfaces/list.interface.js";
 
 export default defineComponent({
   name: "UserListRemote",

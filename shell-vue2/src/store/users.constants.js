@@ -1,4 +1,3 @@
-// constants/users.js
 export const defaultUsers = [
   {
     id: 1,
