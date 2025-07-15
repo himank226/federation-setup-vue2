@@ -2,51 +2,17 @@
 
 ## 💡 Overview
 
-This project demonstrates a **modular micro-frontend architecture**, where a **legacy Vue 2 shell app** dynamically loads **Vue 3 remote apps** using **Webpack Module Federation** across all apps.
+This project demonstrates a **modular micro-frontend architecture**, where a **legacy shell app in Vue 2** that dynamically loads **Vue 3 remote apps** using **Webpack Module Federation** across all apps.
 
 ---
 
 ## 🚩 Problem Statement
 
-- A **Vue 2 shell app** manages **global store**, **i18n**, and **API actions**.
+- **Vue 2 shell app** manages **global store**, **i18n**, and **API actions**.
 - **Vue 3 remote apps** are dynamically loaded:
   - Consume the parent’s store reactively
   - Use parent’s i18n instance
   - Emit events to request updates
-- Shell app handles all store updates.
-
----
-
-## 🗺️ Architecture (All Apps with Webpack Module Federation)
-
-### Shell App: `shell-vue2`
-
-- Vue 2 app acting as host shell.
-- Provides:
-  - **Reactive global store** (`Vue.observable`)
-  - **i18n instance** (vue-i18n)
-  - API actions and routing.
-- Loads remotes via routes:
-  - `/users`: User List App
-  - `/edit-user?id=123`: Edit User App
-
----
-
-### Remote App 1: `users-app-vue3`
-
-- Vue 3 app
-- Displays user table from shell store
-- Reacts to updates automatically
-- Uses shell i18n for translations
-
----
-
-### Remote App 2: `edit-user-app-vue3`
-
-- Vue 3 app
-- Displays editable user form
-- Emits update events to parent on submit
-- Parent handles updates using `store.updateUsers()` and simulates API (localStorage)
 
 ---
 
@@ -78,6 +44,37 @@ All apps use **Webpack Module Federation** to enable:
 - 🔒 Strong decoupling
 
 ---
+
+## 🗺️ Architecture
+
+### Shell App: `shell-vue2`
+
+- Vue 2 app acting as host shell.
+- Provides:
+  - **Reactive global store** (`Vue.observable`)
+  - **i18n instance** (vue-i18n)
+  - API actions and routing.
+- Loads remotes via routes:
+  - `/users`: User List App
+  - `/edit-user?id=123`: Edit User App
+
+---
+
+### Remote App 1: `users-app-vue3`
+
+- Vue 3 app
+- Displays user table from shell store
+- Reacts to updates automatically
+- Uses shell i18n for translations
+
+---
+
+### Remote App 2: `edit-user-app-vue3`
+
+- Vue 3 app
+- Displays editable user form
+- Emits update events to parent on submit
+- Parent handles updates using `store.updateUsers()` and simulates API (localStorage)
 
 ## 🧩 Shared Services Provided by Shell App
 
@@ -165,7 +162,7 @@ Open http://localhost:8080 in your browser.
 
 🔗 Live App: https://shell-vue2.vercel.app/
 
-🎥 Walkthrough Video: [link](https://www.loom.com/share/395249f7637e44a2bd2b79e94bbaf2c1?sid=1c417146-00c3-4904-b8dc-3b2e7d129736)
+🎥 Walkthrough Video: [link](https://www.loom.com/share/2a86cc963712446cb97539c8b10ccc0f?sid=7f432450-485d-4eb1-afd2-69611555deca)
 
 💻 Source Code: [GitHub Repository](https://github.com/himank226/federation-setup-vue2)
 
