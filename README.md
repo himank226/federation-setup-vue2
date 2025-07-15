@@ -2,7 +2,7 @@
 
 ## 💡 Overview
 
-This project demonstrates a **modular micro-frontend architecture**, where a **legacy shell app in Vue 2** that dynamically loads **Vue 3 remote apps** using **Webpack Module Federation** across all apps.
+This project demonstrates a **modular micro-frontend architecture**, where a **legacy shell app in Vue 2** that dynamically loads **Vue 3 remote apps with typescript** using **Webpack Module Federation** across all apps.
 
 ---
 
