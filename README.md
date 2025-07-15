@@ -162,7 +162,7 @@ Open http://localhost:8080 in your browser.
 
 🔗 Live App: https://shell-vue2.vercel.app/
 
-🎥 Walkthrough Video: [link](https://www.loom.com/share/2a86cc963712446cb97539c8b10ccc0f?sid=7f432450-485d-4eb1-afd2-69611555deca)
+🎥 Walkthrough Video: [link](https://www.loom.com/share/2a86cc963712446cb97539c8b10ccc0f)
 
 💻 Source Code: [GitHub Repository](https://github.com/himank226/federation-setup-vue2)
 
@@ -170,3 +170,5 @@ Open http://localhost:8080 in your browser.
 ![User List Page](./screenshots/screenshot-user-list.png)
 
 ![Edit User Page](./screenshots/screenshot-edit.png)
+
+![Edit User Page](./screenshots/screenshot-edit-alert.png)
